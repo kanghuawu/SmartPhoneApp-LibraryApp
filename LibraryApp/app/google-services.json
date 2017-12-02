@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "68438159910",
+    "firebase_url": "https://cmpe277-1509422133366.firebaseio.com",
+    "project_id": "cmpe277-1509422133366",
+    "storage_bucket": "cmpe277-1509422133366.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68438159910:android:9ad1d2ef47a6c2cf",
+        "android_client_info": {
+          "package_name": "com.cmpe277.libraryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68438159910-43s3qknm9lpo60r3bapsut3ih65j69lm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK0MYtqLWsyJD3PrT4GNSl1U1rP7IGnIY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
