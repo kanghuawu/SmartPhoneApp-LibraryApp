@@ -5,27 +5,26 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
-import com.cmpe277.libraryapp.models.Book;
 import com.cmpe277.libraryapp.strategies.LibrarianStrategy;
 import com.cmpe277.libraryapp.strategies.PatronStrategy;
 import com.cmpe277.libraryapp.strategies.UserStrategy;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static com.cmpe277.libraryapp.LoginActivity.IS_LIBRARIAN;
 import static com.cmpe277.libraryapp.LoginActivity.LIB_PREFS;
 
-public class BookDetailActivity extends AppCompatActivity {
-    private Book mBook;
-    private DatabaseReference mDatabaseReference;
+public class LandingPageActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_form);
+        setContentView(R.layout.activity_landing_page);
+        mAuth = FirebaseAuth.getInstance();
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
         boolean isLibrarian = prefs.getBoolean(IS_LIBRARIAN, true);
 
@@ -36,11 +35,16 @@ public class BookDetailActivity extends AppCompatActivity {
         } else {
             userStrategy = new PatronStrategy();
         }
+        userStrategy.setUpLandingPage(LandingPageActivity.this);
+    }
 
-        Intent bookListIntent = getIntent();
-        mBook = (Book) bookListIntent.getSerializableExtra("book");
-        if (mBook != null) {
-            userStrategy.setUpDetailPage(BookDetailActivity.this, mDatabaseReference, mBook);
-        }
+    public void logOut(View v) {
+        Log.i("LibraryApp", "Loggin out");
+        mAuth.signOut();
+        SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
+        prefs.edit().clear().apply();
+        Intent loginIntent = new Intent(LandingPageActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 }

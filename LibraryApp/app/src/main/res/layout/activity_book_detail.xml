@@ -1,10 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.cmpe277.libraryapp.BookDetailActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/book_image"
+        android:layout_width="match_parent"
+        android:layout_height="236dp"
+        android:contentDescription="@string/book_image"
+        app:srcCompat="@drawable/leather_book"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/book_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="1"
+                android:gravity="center"
+                android:text="@string/book_title"/>
+
+            <TextView
+                android:id="@+id/detail_book_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="6"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text=""/>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/book_author"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="1"
+                android:gravity="center"
+                android:text="@string/book_author"/>
+
+            <TextView
+                android:id="@+id/detail_book_author"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="6"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text=""/>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/book_callnum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="1"
+                android:gravity="center"
+                android:text="@string/book_callnum"/>
+
+            <TextView
+                android:id="@+id/detail_book_callnum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="6"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text=""/>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/book_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="1"
+                android:gravity="center"
+                android:text="@string/book_status"/>
+
+            <TextView
+                android:id="@+id/detail_book_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_span="6"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text=""/>
+
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/detail_button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/detail_button_1"/>
+
+        <Button
+            android:id="@+id/detail_button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/detail_button_2"/>
+    </LinearLayout>
+</LinearLayout>

@@ -21,6 +21,10 @@
         </activity>
         <activity android:name=".BookDetailActivity">
         </activity>
+        <activity android:name=".LandingPageActivity">
+        </activity>
+        <activity android:name=".BookCreateActivity">
+        </activity>
     </application>
 
 </manifest>

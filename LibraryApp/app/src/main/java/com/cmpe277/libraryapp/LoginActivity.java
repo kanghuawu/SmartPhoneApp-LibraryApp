@@ -15,19 +15,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cmpe277.libraryapp.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
-import static com.cmpe277.libraryapp.DBHelper.saveUserInfoToDB;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String LIB_PREFS = "LibPrefs";
     public static final String IS_LIBRARIAN = "IsLibrarian";
+    public static final String EMAIL = "email";
 
     private FirebaseAuth mAuth;
     // UI references.
@@ -56,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             Log.d("LibraryApp", "Current user" + mAuth.getCurrentUser().getEmail().toString());
-
+            switchPage();
         }
     }
 
@@ -93,10 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("LibraryApp", "Problem signing in: " + task.getException());
                     showErrorDialog("There was a problem signing in");
                 } else {
-                    Intent intent = new Intent(LoginActivity.this, BookListActivity.class);
-                    saveUserIdentity();
-                    finish();
-                    startActivity(intent);
+                    switchPage();
                 }
             }
         });
@@ -105,11 +100,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveUserIdentity() {
         String email = mEmailView.getText().toString();
+        if (email.equals("")) {
+            email = mAuth.getCurrentUser().getEmail().toString();
+        }
         boolean isLibrarian = email.contains("@sjsu.edu");
         SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
-        prefs.edit().putBoolean(IS_LIBRARIAN, isLibrarian).apply();
+        prefs.edit().putBoolean(IS_LIBRARIAN, isLibrarian);
+        prefs.edit().putString(EMAIL, email).apply();
     }
 
+    private void switchPage() {
+        Intent intent = new Intent(LoginActivity.this, LandingPageActivity.class);
+        saveUserIdentity();
+        finish();
+        startActivity(intent);
+    }
 
     private void showErrorDialog(String message) {
         new AlertDialog.Builder(this)

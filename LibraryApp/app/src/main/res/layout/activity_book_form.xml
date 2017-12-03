@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:windowSoftInputMode="adjustPan|adjustResize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_title"/>
+
+                <EditText
+                    android:id="@+id/book_title_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_author"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_author"/>
+
+                <EditText
+                    android:id="@+id/book_author_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_callnum"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_callnum"/>
+
+                <EditText
+                    android:id="@+id/book_callnum_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_publisher"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_publisher"/>
+
+                <EditText
+                    android:id="@+id/book_publisher_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_year"/>
+
+                <EditText
+                    android:id="@+id/book_year_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_location"/>
+
+                <EditText
+                    android:id="@+id/book_location_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_status"/>
+
+                <EditText
+                    android:id="@+id/book_status_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/book_keywords"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="1"
+                    android:gravity="center"
+                    android:text="@string/book_keywords"/>
+
+                <EditText
+                    android:id="@+id/book_keywords_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="6"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:text=""/>
+
+
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/form_button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/form_button1"/>
+
+        <Button
+            android:id="@+id/form_button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/form_button2"/>
+    </LinearLayout>
+
+
+</LinearLayout>

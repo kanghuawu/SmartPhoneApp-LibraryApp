@@ -18,4 +18,24 @@
         completions."
     </string>
     <string name="sample_message">Hello!</string>
+    <string name="landing_button1">LandingFirstButton</string>
+    <string name="landing_button2">LandingSecondButton</string>
+    <string name="book_title">Title</string>
+    <string name="book_author">Author</string>
+    <string name="book_callnum">Call Num</string>
+    <string name="book_publisher">Publisher</string>
+    <string name="book_year">Year</string>
+    <string name="book_location">Location</string>
+    <string name="book_status">Status</string>
+    <string name="book_keywords">Keywords</string>
+    <string name="form_button">Form Button</string>
+    <string name="book_image">Book Image</string>
+    <string name="detail_button_1">Detail Button 1</string>
+    <string name="detail_button_2">Detail Button 2</string>
+    <string name="landing_button3">Log Out</string>
+    <string name="refresh">Refresh</string>
+    <string name="row_author">Author</string>
+    <string name="row_book_title">Book Title</string>
+    <string name="form_button1">Form Button 1</string>
+    <string name="form_button2">Form Button 2</string>
 </resources>
