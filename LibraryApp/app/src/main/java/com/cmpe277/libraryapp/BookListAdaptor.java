@@ -2,6 +2,7 @@ package com.cmpe277.libraryapp;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by bondk on 12/2/17.
@@ -22,11 +25,13 @@ import java.util.ArrayList;
 public class BookListAdaptor extends BaseAdapter {
     private ListActivity mActivity;
     private ArrayList<Book> mBooks;
+    private ArrayList<Book> mBooksAll;
 
 
     public BookListAdaptor(ListActivity activity, ArrayList<Book> book) {
         mActivity = activity;
         mBooks = book;
+        mBooksAll = book;
     }
 
     static class ViewHolder {
@@ -73,5 +78,27 @@ public class BookListAdaptor extends BaseAdapter {
         holder.body.setText(msg);
 
         return convertView;
+    }
+    public void filter(String charText) {
+        charText = charText.toLowerCase();
+        ArrayList<Book> temp = new ArrayList<Book>();
+        //mBooks.clear();
+        if (charText.length() == 0) {
+            //mBooks.addAll(temp);
+            mBooks = mBooksAll;
+        }
+        else
+        {
+            for (Book wp : mBooksAll)
+            {
+                if (wp.getTitle().toLowerCase().contains(charText))
+                {
+                    temp.add(wp);
+                }
+            }
+            mBooks = temp;
+            Log.i("mBooks size ", ""+mBooks.size());
+        }
+        notifyDataSetChanged();
     }
 }
