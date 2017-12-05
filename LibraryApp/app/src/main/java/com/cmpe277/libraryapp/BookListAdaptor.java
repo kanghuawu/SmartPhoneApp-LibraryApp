@@ -97,7 +97,7 @@ public class BookListAdaptor extends BaseAdapter {
                 }
             }
             mBooks = temp;
-            Log.i("mBooks size ", ""+mBooks.size());
+          //  Log.i("mBooks size ", ""+mBooks.size());
         }
         notifyDataSetChanged();
     }

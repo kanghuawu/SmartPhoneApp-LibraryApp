@@ -52,7 +52,7 @@ public class BookListActivity extends ListActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String text = editsearch.getText().toString().toLowerCase();
-                Log.i("this is a test",text);
+             //   Log.i("this is a test",text);
                 mAdapter.filter(text);
             }
 
