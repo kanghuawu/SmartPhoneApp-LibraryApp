@@ -42,7 +42,8 @@ public class DBHelper {
     }
 
     public static void getMyBookListFromDB(DatabaseReference databaseReference, final BaseAdapter adapter, final ArrayList<Book> books, String email) {
-        databaseReference.child(USER_DB).addListenerForSingleValueEvent(new ValueEventListener() {
+        email = email.replace(".", "dot");
+        databaseReference.child(USER_DB).child(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
