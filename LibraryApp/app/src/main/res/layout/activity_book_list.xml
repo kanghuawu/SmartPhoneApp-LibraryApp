@@ -11,6 +11,8 @@
     <EditText
         android:id="@+id/search"
         android:layout_width="fill_parent"
+        android:maxLines="1"
+        android:inputType="text"
         android:layout_height="wrap_content" >
 
         <requestFocus />
