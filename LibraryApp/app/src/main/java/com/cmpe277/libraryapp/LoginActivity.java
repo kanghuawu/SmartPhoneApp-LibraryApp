@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-            Log.d("LibraryApp", "Current user" + mAuth.getCurrentUser().getEmail().toString());
+//            Log.d("LibraryApp", "Current user" + mAuth.getCurrentUser().getEmail().toString());
             switchPage();
         }
     }
@@ -100,12 +100,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveUserIdentity() {
         String email = mEmailView.getText().toString();
+        Log.d("LibraryApp", "saveUserIdentity " + email);
         if (email.equals("")) {
             email = mAuth.getCurrentUser().getEmail().toString();
         }
+        Log.d("LibraryApp", "saveUserIdentity " + email);
         boolean isLibrarian = email.contains("@sjsu.edu");
         SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
-        prefs.edit().putBoolean(IS_LIBRARIAN, isLibrarian);
+        Log.d("LibraryApp", "saveUserIdentity " + String.valueOf(isLibrarian));
+        prefs.edit().putBoolean(IS_LIBRARIAN, isLibrarian).apply();
         prefs.edit().putString(EMAIL, email).apply();
     }
 

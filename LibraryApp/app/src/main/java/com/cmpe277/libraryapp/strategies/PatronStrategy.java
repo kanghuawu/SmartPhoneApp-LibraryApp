@@ -53,7 +53,7 @@ public class PatronStrategy extends UserStrategy {
     @Override
     public void setUpDetailPage(final Activity activity, final DatabaseReference databaseReference, final Book book) {
         renderBookDetail(activity, book);
-        toggleEditable(activity, false);
+        toggleEditable(activity);
 
         Button form_button1 = activity.findViewById(R.id.form_button1);
         form_button1.setText("Rent");

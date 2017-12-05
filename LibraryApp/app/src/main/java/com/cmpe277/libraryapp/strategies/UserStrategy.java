@@ -62,27 +62,7 @@ public abstract class UserStrategy {
         keywords.setText(book.getKeywords());
     }
 
-    void toggleEditable(Activity activity, boolean toggleEdible) {
-        EditText title = activity.findViewById(R.id.book_title_edit);
-        EditText author = activity.findViewById(R.id.book_author_edit);
-        EditText publisher = activity.findViewById(R.id.book_publisher_edit);
-        EditText year = activity.findViewById(R.id.book_year_edit);
-        EditText location = activity.findViewById(R.id.book_location_edit);
-        EditText keywords = activity.findViewById(R.id.book_keywords_edit);
-        title.setFocusableInTouchMode(toggleEdible);
-        author.setFocusableInTouchMode(toggleEdible);
-        publisher.setFocusableInTouchMode(toggleEdible);
-        year.setFocusableInTouchMode(toggleEdible);
-        location.setFocusableInTouchMode(toggleEdible);
-        keywords.setFocusableInTouchMode(toggleEdible);
-        title.setFocusable(toggleEdible);
-        author.setFocusable(toggleEdible);
-        publisher.setFocusable(toggleEdible);
-        year.setFocusable(toggleEdible);
-        location.setFocusable(toggleEdible);
-        keywords.setFocusable(toggleEdible);
-        toggleEdible  = !toggleEdible;
-    }
+
 
     Book prepareUpdate(Activity activity) {
         Book book = new Book();
@@ -103,5 +83,26 @@ public abstract class UserStrategy {
         book.setCurrentStatus(status);
         book.setKeywords(keywords);
         return book;
+    }
+    void toggleEditable(Activity activity) {
+        EditText title = activity.findViewById(R.id.book_title_edit);
+        EditText author = activity.findViewById(R.id.book_author_edit);
+        EditText publisher = activity.findViewById(R.id.book_publisher_edit);
+        EditText year = activity.findViewById(R.id.book_year_edit);
+        EditText location = activity.findViewById(R.id.book_location_edit);
+        EditText keywords = activity.findViewById(R.id.book_keywords_edit);
+        title.setFocusableInTouchMode(toggleEdible);
+        author.setFocusableInTouchMode(toggleEdible);
+        publisher.setFocusableInTouchMode(toggleEdible);
+        year.setFocusableInTouchMode(toggleEdible);
+        location.setFocusableInTouchMode(toggleEdible);
+        keywords.setFocusableInTouchMode(toggleEdible);
+        title.setFocusable(toggleEdible);
+        author.setFocusable(toggleEdible);
+        publisher.setFocusable(toggleEdible);
+        year.setFocusable(toggleEdible);
+        location.setFocusable(toggleEdible);
+        keywords.setFocusable(toggleEdible);
+        toggleEdible  = !toggleEdible;
     }
 }

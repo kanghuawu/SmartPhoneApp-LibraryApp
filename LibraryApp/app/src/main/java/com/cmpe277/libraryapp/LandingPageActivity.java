@@ -26,8 +26,9 @@ public class LandingPageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
-        boolean isLibrarian = prefs.getBoolean(IS_LIBRARIAN, true);
+        boolean isLibrarian = prefs.getBoolean(IS_LIBRARIAN, false);
 
+        Log.i("LibraryApp", "IsLibrarian " + String.valueOf(isLibrarian));
         UserStrategy userStrategy;
         if (isLibrarian) {
             userStrategy = new LibrarianStrategy();

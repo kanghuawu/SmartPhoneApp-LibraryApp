@@ -52,7 +52,7 @@ public class LibrarianStrategy extends UserStrategy  {
     @Override
     public void setUpDetailPage(final Activity activity, final DatabaseReference databaseReference, final Book book) {
         renderBookDetail(activity, book);
-        toggleEditable(activity, toggleEdible);
+        toggleEditable(activity);
         final Button form_button1 = activity.findViewById(R.id.form_button1);
         form_button1.setText("Edit");
         form_button1.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +73,7 @@ public class LibrarianStrategy extends UserStrategy  {
                         addOrUpdateNewBookToDB(databaseReference, newBook);
                     }
                 }
-                toggleEditable(activity, toggleEdible);
+                toggleEditable(activity);
                 Log.i("LibraryApp", String.valueOf(toggleEdible));
             }
         });
@@ -88,4 +88,6 @@ public class LibrarianStrategy extends UserStrategy  {
             }
         });
     }
+
+
 }
