@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bondk on 12/2/17.
@@ -22,6 +23,8 @@ public class DBHelper {
     public static final String BOOK_STATUS = "status";
     public static final String BOOK_STATUS_RENT = "Rent";
     public static final String BOOK_STATUS_AVAILABLE = "Available";
+
+    public static final String BOOK_BORROWED_DATE = "";
 
 
     public static void getAllBookListFromDB(DatabaseReference databaseReference, final BaseAdapter adapter, final ArrayList<Book> books) {
@@ -69,14 +72,23 @@ public class DBHelper {
     }
 
     public static void rentBook(DatabaseReference databaseReference, Book book, String email) {
-        email = email.replace(".", "dot");
-        databaseReference.child(USER_DB).child(email)
-                .child(book.getCallNumber())
-                .setValue(book);
-        databaseReference.child(BOOK_DB)
-                .child(book.getCallNumber())
-                .child(BOOK_STATUS)
-                .setValue(BOOK_STATUS_RENT);
+        Log.i("INFO", "Book " + book.getTitle() +  " status: " + bookIsAvailable(databaseReference, book));
+
+        if(bookIsAvailable(databaseReference, book)) {
+
+            Log.i("INFO", "Book " + book.getTitle() +  " is available.");
+
+            email = email.replace(".", "dot");
+            databaseReference.child(USER_DB).child(email)
+                    .child(book.getCallNumber())
+                    .setValue(book);
+            databaseReference.child(BOOK_DB)
+                    .child(book.getCallNumber())
+                    .child(BOOK_STATUS)
+                    .setValue(BOOK_STATUS_RENT);
+        } else {
+            Log.i("INFO", "Book " + book.getTitle() +  " is not available.");
+        }
     }
 
     public static void returnBook(DatabaseReference databaseReference, Book book, String email) {
@@ -88,5 +100,31 @@ public class DBHelper {
                 .child(book.getCallNumber())
                 .child(BOOK_STATUS)
                 .setValue(BOOK_STATUS_AVAILABLE);
+    }
+
+    public static boolean bookIsAvailable(DatabaseReference databaseReference, final Book book) {
+        final boolean[] available = {false};
+        DatabaseReference mostafa = databaseReference.child(BOOK_DB)
+                .child(book.getCallNumber())
+                .child(BOOK_STATUS);
+
+        mostafa.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String bookStatus = dataSnapshot.getValue(String.class);
+                //do what you want with the bookStatus
+
+                if(bookStatus.equals("")) {
+                   available[0] = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return available[0];
     }
 }

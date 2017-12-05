@@ -18,6 +18,8 @@ public class Book implements Serializable {
     private String currentStatus = "";
     private String keywords = "";
     private String coverImage = "";
+    private String borrowTime = "";  // if extended, this will be the time of the first borrow record
+    private int numOfExtension = 0;     // [0, 2]
 
     public Book() {
     }
@@ -102,6 +104,22 @@ public class Book implements Serializable {
         this.coverImage = coverImage;
     }
 
+    public String getBorrowTime() {
+        return borrowTime;
+    }
+
+    public void setBorrowTime(String borrowTime) {
+        this.borrowTime = borrowTime;
+    }
+
+    public int getNumOfExtension() {
+        return numOfExtension;
+    }
+
+    public void setNumOfExtension(int numOfExtension) {
+        this.numOfExtension = numOfExtension;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
@@ -114,7 +132,8 @@ public class Book implements Serializable {
                 ", numOfCopies=" + numOfCopies +
                 ", currentStatus='" + currentStatus + '\'' +
                 ", keywords='" + keywords + '\'' +
-                ", coverImage='" + coverImage + '\'' +
+                ", borrowTime='" + borrowTime + '\'' +
+                ", numOfExtension='" + numOfExtension + '\'' +
                 '}';
     }
 
@@ -128,6 +147,8 @@ public class Book implements Serializable {
                 && that.locationInLibrary.equals(this.locationInLibrary)
                 && that.numOfCopies == this.numOfCopies
                 && that.currentStatus.equals(this.currentStatus)
-                && that.keywords.equals(this.keywords);
+                && that.keywords.equals(this.keywords)
+                && that.borrowTime.equals(this.borrowTime)
+                && that.numOfExtension == this.numOfExtension;
     }
 }

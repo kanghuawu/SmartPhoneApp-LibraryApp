@@ -24,6 +24,14 @@ import static com.cmpe277.libraryapp.LoginActivity.LIB_PREFS;
  */
 
 public class PatronStrategy extends UserStrategy {
+
+    public static final String USER_DB = "user";
+    public static final String BOOK_DB = "book";
+
+    public static final String BOOK_STATUS = "status";
+    public static final String BOOK_STATUS_RENT = "Rent";
+    public static final String BOOK_STATUS_AVAILABLE = "Available";
+
     @Override
     public void setUpLandingPage(final Activity activity) {
         Button landing_button1 = activity.findViewById(R.id.landing_button1);
@@ -64,7 +72,9 @@ public class PatronStrategy extends UserStrategy {
                 SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
                 String email = prefs.getString(EMAIL, "");
                 if (!email.equals("")) {
+
                     rentBook(databaseReference, book, email);
+
                     Intent intentMyList = new Intent(activity, BookListActivity.class);
                     activity.setResult(45);
                     activity.finish();
