@@ -15,7 +15,7 @@ public class Book implements Serializable {
     private String yearOfPublication = "";
     private String locationInLibrary = "";
     private int numOfCopies = 1;
-    private String currentStatus = "";
+    private String currentStatus = "Available";
     private String keywords = "";
     private String coverImage = "";
     private String borrowTime = "";  // if extended, this will be the time of the first borrow record

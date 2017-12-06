@@ -1,5 +1,6 @@
 package com.cmpe277.libraryapp;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.BaseAdapter;
 
@@ -9,8 +10,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by bondk on 12/2/17.
@@ -24,7 +26,7 @@ public class DBHelper {
     public static final String BOOK_STATUS_RENT = "Rent";
     public static final String BOOK_STATUS_AVAILABLE = "Available";
 
-    public static final String BOOK_BORROWED_DATE = "";
+    public static final String BOOK_BORROW_Time = "borrowTime";
 
 
     public static void getAllBookListFromDB(DatabaseReference databaseReference, final BaseAdapter adapter, final ArrayList<Book> books) {
@@ -72,23 +74,7 @@ public class DBHelper {
     }
 
     public static void rentBook(DatabaseReference databaseReference, Book book, String email) {
-        Log.i("INFO", "Book " + book.getTitle() +  " status: " + bookIsAvailable(databaseReference, book));
-
-        if(bookIsAvailable(databaseReference, book)) {
-
-            Log.i("INFO", "Book " + book.getTitle() +  " is available.");
-
-            email = email.replace(".", "dot");
-            databaseReference.child(USER_DB).child(email)
-                    .child(book.getCallNumber())
-                    .setValue(book);
-            databaseReference.child(BOOK_DB)
-                    .child(book.getCallNumber())
-                    .child(BOOK_STATUS)
-                    .setValue(BOOK_STATUS_RENT);
-        } else {
-            Log.i("INFO", "Book " + book.getTitle() +  " is not available.");
-        }
+        bookIsAvailable(databaseReference, book, email);
     }
 
     public static void returnBook(DatabaseReference databaseReference, Book book, String email) {
@@ -102,20 +88,20 @@ public class DBHelper {
                 .setValue(BOOK_STATUS_AVAILABLE);
     }
 
-    public static boolean bookIsAvailable(DatabaseReference databaseReference, final Book book) {
-        final boolean[] available = {false};
+    public static void bookIsAvailable(final DatabaseReference databaseReference, final Book book, final String email) {
         DatabaseReference mostafa = databaseReference.child(BOOK_DB)
                 .child(book.getCallNumber())
                 .child(BOOK_STATUS);
+
 
         mostafa.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String bookStatus = dataSnapshot.getValue(String.class);
-                //do what you want with the bookStatus
 
-                if(bookStatus.equals("")) {
-                   available[0] = true;
+                if(bookStatus == null || !bookStatus.equals(BOOK_STATUS_RENT)) {
+                    Log.i("INFO", "Book " + book.getTitle() + " can be borrowed.");
+                    new rentBookTask(databaseReference, email, book).execute();
                 }
             }
 
@@ -124,7 +110,41 @@ public class DBHelper {
 
             }
         });
+    }
 
-        return available[0];
+
+    private static class rentBookTask extends AsyncTask<String, Void, Void> {
+        DatabaseReference databaseReference;
+        String email;
+        Book book;
+
+        rentBookTask(DatabaseReference databaseReference, String email, Book book) {
+            this.databaseReference = databaseReference;
+            this.email = email;
+            this.book = book;
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            Log.i("INFO", "Book " + book.getTitle() +  " is available.");
+
+            email = email.replace(".", "dot");
+            databaseReference.child(USER_DB).child(email)
+                    .child(book.getCallNumber())
+                    .setValue(book);
+
+            databaseReference.child(BOOK_DB)
+                    .child(book.getCallNumber())
+                    .child(BOOK_STATUS)
+                    .setValue(BOOK_STATUS_RENT);
+
+            String curTime = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
+            databaseReference.child(BOOK_DB)
+                    .child(book.getCallNumber())
+                    .child(BOOK_BORROW_Time)
+                    .setValue(curTime);
+            Log.i("INFO", "Set book " + book.getTitle() +  " borrow time to be: " + curTime);
+            return null;
+        }
     }
 }
