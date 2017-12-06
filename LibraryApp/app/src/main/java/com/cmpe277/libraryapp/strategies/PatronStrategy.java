@@ -87,7 +87,6 @@ public class PatronStrategy extends UserStrategy {
             }
         });
         Button form_button2 = activity.findViewById(R.id.form_button2);
-//        form_button2.setVisibility(View.GONE);
 
         form_button2.setText("Extend");
         form_button2.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +94,11 @@ public class PatronStrategy extends UserStrategy {
             public void onClick(View view) {
                 Log.i("LibraryApp", "Extending a book");
                 extendBook(databaseReference, book);
+
+                Intent intentMyList = new Intent(activity, BookListActivity.class);
+                activity.setResult(45);
                 activity.finish();
+                activity.startActivity(intentMyList);
             }
         });
     }
