@@ -22,11 +22,14 @@ public class DBHelper {
     public static final String USER_DB = "user";
     public static final String BOOK_DB = "book";
 
-    public static final String BOOK_STATUS = "status";
+    public static final String BOOK_STATUS = "currentStatus";
     public static final String BOOK_STATUS_RENT = "Rent";
     public static final String BOOK_STATUS_AVAILABLE = "Available";
 
     public static final String BOOK_BORROW_Time = "borrowTime";
+    public static final String TIME_FORMAT = "MM/dd/yyyy HH:mm:ss";
+
+    public static final String NUM_OF_EXTENSION = "numOfExtension";
 
 
     public static void getAllBookListFromDB(DatabaseReference databaseReference, final BaseAdapter adapter, final ArrayList<Book> books) {
@@ -74,58 +77,7 @@ public class DBHelper {
     }
 
     public static void rentBook(DatabaseReference databaseReference, Book book, String email) {
-        bookIsAvailable(databaseReference, book, email);
-    }
-
-    public static void returnBook(DatabaseReference databaseReference, Book book, String email) {
-        email = email.replace(".", "dot");
-        databaseReference.child(USER_DB).child(email)
-                .child(book.getCallNumber())
-                .removeValue();
-        databaseReference.child(BOOK_DB).child(email)
-                .child(book.getCallNumber())
-                .child(BOOK_STATUS)
-                .setValue(BOOK_STATUS_AVAILABLE);
-    }
-
-    public static void bookIsAvailable(final DatabaseReference databaseReference, final Book book, final String email) {
-        DatabaseReference mostafa = databaseReference.child(BOOK_DB)
-                .child(book.getCallNumber())
-                .child(BOOK_STATUS);
-
-
-        mostafa.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String bookStatus = dataSnapshot.getValue(String.class);
-
-                if(bookStatus == null || !bookStatus.equals(BOOK_STATUS_RENT)) {
-                    Log.i("INFO", "Book " + book.getTitle() + " can be borrowed.");
-                    new rentBookTask(databaseReference, email, book).execute();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-    private static class rentBookTask extends AsyncTask<String, Void, Void> {
-        DatabaseReference databaseReference;
-        String email;
-        Book book;
-
-        rentBookTask(DatabaseReference databaseReference, String email, Book book) {
-            this.databaseReference = databaseReference;
-            this.email = email;
-            this.book = book;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
+        if(!book.getCurrentStatus().equals(BOOK_STATUS_RENT)) {
             Log.i("INFO", "Book " + book.getTitle() +  " is available.");
 
             email = email.replace(".", "dot");
@@ -138,13 +90,37 @@ public class DBHelper {
                     .child(BOOK_STATUS)
                     .setValue(BOOK_STATUS_RENT);
 
-            String curTime = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
+            String curTime = new SimpleDateFormat(TIME_FORMAT).format(new Date());
             databaseReference.child(BOOK_DB)
                     .child(book.getCallNumber())
                     .child(BOOK_BORROW_Time)
                     .setValue(curTime);
             Log.i("INFO", "Set book " + book.getTitle() +  " borrow time to be: " + curTime);
-            return null;
+        } else {
+            Log.i("INFO", "Book " + book.getTitle() + " is not available");
         }
+    }
+
+    public static void extendBook(DatabaseReference databaseReference, Book book) {
+        if(book.getNumOfExtension() < 2) {
+            Log.i("INFO", "Book " + book.getTitle() +  " can be extended.");
+            databaseReference.child(BOOK_DB)
+                    .child(book.getCallNumber())
+                    .child(NUM_OF_EXTENSION)
+                    .setValue(book.getNumOfExtension() + 1);
+        } else {
+            Log.i("INFO", "Book " + book.getTitle() +  " has already been extended twice.");
+        }
+    }
+
+    public static void returnBook(DatabaseReference databaseReference, Book book, String email) {
+        email = email.replace(".", "dot");
+        databaseReference.child(USER_DB).child(email)
+                .child(book.getCallNumber())
+                .removeValue();
+        databaseReference.child(BOOK_DB).child(email)
+                .child(book.getCallNumber())
+                .child(BOOK_STATUS)
+                .setValue(BOOK_STATUS_AVAILABLE);
     }
 }
