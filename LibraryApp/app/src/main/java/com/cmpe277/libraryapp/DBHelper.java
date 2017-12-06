@@ -104,10 +104,15 @@ public class DBHelper {
     public static void extendBook(DatabaseReference databaseReference, Book book) {
         if(book.getNumOfExtension() < 2) {
             Log.i("INFO", "Book " + book.getTitle() +  " can be extended.");
-            databaseReference.child(BOOK_DB)
-                    .child(book.getCallNumber())
-                    .child(NUM_OF_EXTENSION)
-                    .setValue(book.getNumOfExtension() + 1);
+            if(book.getCurrentStatus().equals(BOOK_STATUS_RENT)) {
+                databaseReference.child(BOOK_DB)
+                        .child(book.getCallNumber())
+                        .child(NUM_OF_EXTENSION)
+                        .setValue(book.getNumOfExtension() + 1);
+            } else {
+                Log.i("INFO", "Cannot extend a book that's not rent by you.");
+            }
+
         } else {
             Log.i("INFO", "Book " + book.getTitle() +  " has already been extended twice.");
         }
