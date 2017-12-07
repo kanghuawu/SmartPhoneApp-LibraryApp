@@ -82,7 +82,14 @@ public class PatronStrategy extends UserStrategy {
                 final String email = prefs.getString(EMAIL, "");
 //                Log.i("LibraryApp",email);
                 if (!email.equals("")) {
-                    //Send email notification when rent a book
+
+                    String feedback = rentBook(databaseReference, book, email);
+                    if(!feedback.equals("")) {
+                        Toast.makeText(activity, feedback,
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    //Send email notification after rent a book
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -92,13 +99,6 @@ public class PatronStrategy extends UserStrategy {
                             sendEmailNotification(email, emailContent);
                         }
                     }).start();
-
-                    String feedback = rentBook(databaseReference, book, email);
-                    if(!feedback.equals("")) {
-                        Toast.makeText(activity, feedback,
-                                Toast.LENGTH_LONG).show();
-                    }
-
                     Intent intentMyList = new Intent(activity, BookListActivity.class);
                     activity.setResult(45);
                     activity.finish();
