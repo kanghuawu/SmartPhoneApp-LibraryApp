@@ -30,6 +30,7 @@ public class BookListActivity extends ListActivity {
     private ArrayList<Book> mBooks;
     private String mEmail;
     EditText editsearch;
+    boolean isMyList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +39,11 @@ public class BookListActivity extends ListActivity {
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
+
         mEmail = prefs.getString(EMAIL, "");
         editsearch = (EditText) findViewById(R.id.search);
+
+        isMyList = getIntent().getBooleanExtra("myBookList", false);
 
         editsearch.addTextChangedListener(new TextWatcher() {
 
@@ -69,8 +73,10 @@ public class BookListActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Book book = mBooks.get(position);
+
         Intent intentBookDetail = new Intent(BookListActivity.this, BookDetailActivity.class);
         intentBookDetail.putExtra("book", book);
+        intentBookDetail.putExtra("isMyBookList", isMyList);
         startActivityForResult(intentBookDetail, 89);
     }
 

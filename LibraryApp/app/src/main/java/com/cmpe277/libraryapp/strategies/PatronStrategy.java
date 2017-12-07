@@ -19,6 +19,7 @@ import static com.cmpe277.libraryapp.DBHelper.addOrUpdateNewBookToDB;
 import static com.cmpe277.libraryapp.DBHelper.extendBook;
 import static com.cmpe277.libraryapp.DBHelper.removeBookFromDB;
 import static com.cmpe277.libraryapp.DBHelper.rentBook;
+import static com.cmpe277.libraryapp.DBHelper.returnBook;
 import static com.cmpe277.libraryapp.LoginActivity.EMAIL;
 import static com.cmpe277.libraryapp.LoginActivity.IS_LIBRARIAN;
 import static com.cmpe277.libraryapp.LoginActivity.LIB_PREFS;
@@ -62,8 +63,10 @@ public class PatronStrategy extends UserStrategy {
         });
     }
 
+    // detail view for BOOKLIST. contains only one button "RENT"
     @Override
     public void setUpDetailPage(final Activity activity, final DatabaseReference databaseReference, final Book book) {
+        Log.i("patron  line69&&&", "status " + book.getCurrentStatus());
         renderBookDetail(activity, book);
         toggleEditable(activity);
 
@@ -87,18 +90,53 @@ public class PatronStrategy extends UserStrategy {
             }
         });
         Button form_button2 = activity.findViewById(R.id.form_button2);
+        form_button2.setVisibility(View.GONE);
+    }
+
+    // detail view for MY BOOKLIST. contains two buttons "RETURN" and "EXTEND"
+    public void setUpDetailPageForMyList(final Activity activity, final DatabaseReference databaseReference, final Book book) {
+        renderBookDetail(activity, book);
+        toggleEditable(activity);
+
+        Button form_button1 = activity.findViewById(R.id.form_button1);
+        form_button1.setText("Return");
+        form_button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("LibraryApp", "Returning a book");
+                SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
+                String email = prefs.getString(EMAIL, "");
+                if (!email.equals("")) {
+
+                    returnBook(databaseReference, book, email);
+
+                    Intent intentMyList = new Intent(activity, BookListActivity.class);
+                    activity.setResult(45);
+                    activity.finish();
+                    activity.startActivity(intentMyList);
+                }
+            }
+        });
+        Button form_button2 = activity.findViewById(R.id.form_button2);
 
         form_button2.setText("Extend");
         form_button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("LibraryApp", "Extending a book");
-                extendBook(databaseReference, book);
+                Log.i("LibraryApp", "Extending book " + book.getTitle());
 
-                Intent intentMyList = new Intent(activity, BookListActivity.class);
-                activity.setResult(45);
-                activity.finish();
-                activity.startActivity(intentMyList);
+                SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
+                String email = prefs.getString(EMAIL, "");
+
+                if (!email.equals("")) {
+                    extendBook(databaseReference, book, email);
+
+                    Intent intentMyList = new Intent(activity, BookListActivity.class);
+                    activity.setResult(45);
+                    activity.finish();
+                    activity.startActivity(intentMyList);
+                }
+
             }
         });
     }

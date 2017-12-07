@@ -24,7 +24,6 @@ public class DBHelper {
 
     public static final String BOOK_STATUS = "currentStatus";
     public static final String BOOK_STATUS_RENT = "Rent";
-    public static final String BOOK_STATUS_AVAILABLE = "Available";
 
     public static final String BOOK_BORROW_Time = "borrowTime";
     public static final String TIME_FORMAT = "MM/dd/yyyy HH:mm:ss";
@@ -37,7 +36,10 @@ public class DBHelper {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    books.add(child.getValue(Book.class));
+                    Log.i("&&&", child.getKey());
+                    if(!child.getKey().contains("@")) {
+                        books.add(child.getValue(Book.class));
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -81,41 +83,58 @@ public class DBHelper {
             Log.i("INFO", "Book " + book.getTitle() +  " is available.");
 
             email = email.replace(".", "dot");
+            String curTime = new SimpleDateFormat(TIME_FORMAT).format(new Date());
+
             databaseReference.child(USER_DB).child(email)
                     .child(book.getCallNumber())
                     .setValue(book);
-
+            databaseReference.child(USER_DB).child(email)
+                    .child(book.getCallNumber())
+                    .child(BOOK_STATUS)
+                    .setValue(BOOK_STATUS_RENT);
+            databaseReference.child(USER_DB).child(email)
+                    .child(book.getCallNumber())
+                    .child(BOOK_BORROW_Time)
+                    .setValue(curTime);
             databaseReference.child(BOOK_DB)
                     .child(book.getCallNumber())
                     .child(BOOK_STATUS)
                     .setValue(BOOK_STATUS_RENT);
-
-            String curTime = new SimpleDateFormat(TIME_FORMAT).format(new Date());
             databaseReference.child(BOOK_DB)
                     .child(book.getCallNumber())
                     .child(BOOK_BORROW_Time)
                     .setValue(curTime);
+
             Log.i("INFO", "Set book " + book.getTitle() +  " borrow time to be: " + curTime);
         } else {
             Log.i("INFO", "Book " + book.getTitle() + " is not available");
         }
     }
 
-    public static void extendBook(DatabaseReference databaseReference, Book book) {
-        if(book.getNumOfExtension() < 2) {
-            Log.i("INFO", "Book " + book.getTitle() +  " can be extended.");
-            if(book.getCurrentStatus().equals(BOOK_STATUS_RENT)) {
+    public static void extendBook(DatabaseReference databaseReference, Book book, String email) {
+        email = email.replace(".", "dot");
+        if(book.getCurrentStatus().equals("Rent")) {
+            Log.i("INFO", "Book " + book.getTitle() + " can be extended.");
+
+            if(book.getNumOfExtension() < 2) {
+                int curNumOfExtension = book.getNumOfExtension();
+                Log.i("DEBUG", "cur numOfExtension: " + book.getNumOfExtension());
+
+                databaseReference.child(USER_DB).child(email)
+                        .child(book.getCallNumber())
+                        .child(NUM_OF_EXTENSION)
+                        .setValue(curNumOfExtension + 1);
                 databaseReference.child(BOOK_DB)
                         .child(book.getCallNumber())
                         .child(NUM_OF_EXTENSION)
-                        .setValue(book.getNumOfExtension() + 1);
+                        .setValue(curNumOfExtension + 1);
             } else {
-                Log.i("INFO", "Cannot extend a book that's not rent by you.");
+                Log.i("INFO", "Book " + book.getTitle() +  " has already been extended twice.");
             }
-
         } else {
-            Log.i("INFO", "Book " + book.getTitle() +  " has already been extended twice.");
+            Log.i("INFO", "Cannot extend a book that's not rent by you.");
         }
+
     }
 
     public static void returnBook(DatabaseReference databaseReference, Book book, String email) {
@@ -123,9 +142,13 @@ public class DBHelper {
         databaseReference.child(USER_DB).child(email)
                 .child(book.getCallNumber())
                 .removeValue();
-        databaseReference.child(BOOK_DB).child(email)
+        databaseReference.child(BOOK_DB)
                 .child(book.getCallNumber())
                 .child(BOOK_STATUS)
-                .setValue(BOOK_STATUS_AVAILABLE);
+                .setValue("");
+        databaseReference.child(BOOK_DB)
+                .child(book.getCallNumber())
+                .child(BOOK_BORROW_Time)
+                .setValue("");
     }
 }

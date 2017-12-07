@@ -19,6 +19,7 @@ import static com.cmpe277.libraryapp.LoginActivity.LIB_PREFS;
 public class BookDetailActivity extends AppCompatActivity {
     private Book mBook;
     private DatabaseReference mDatabaseReference;
+    private boolean isMyBookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,16 @@ public class BookDetailActivity extends AppCompatActivity {
 
         Intent bookListIntent = getIntent();
         mBook = (Book) bookListIntent.getSerializableExtra("book");
+        isMyBookList =  (boolean) bookListIntent.getSerializableExtra("isMyBookList");
+
         if (mBook != null) {
-            userStrategy.setUpDetailPage(BookDetailActivity.this, mDatabaseReference, mBook);
+            if(isMyBookList) {
+                ((PatronStrategy)userStrategy).setUpDetailPageForMyList(BookDetailActivity.this, mDatabaseReference, mBook);
+            } else {
+                userStrategy.setUpDetailPage(BookDetailActivity.this, mDatabaseReference, mBook);
+            }
+        } else {
+            Log.i("DEBUG", "mBook is null");
         }
     }
 }
