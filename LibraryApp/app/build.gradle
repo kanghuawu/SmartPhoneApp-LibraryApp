@@ -26,9 +26,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.google.firebase:firebase-database:9.6.0'
     implementation 'com.google.firebase:firebase-auth:9.6.0'
+<<<<<<< HEAD
     implementation files('src/libs/activation.jar')
     implementation files('src/libs/additionnal.jar')
     implementation files('src/libs/mail.jar')
+=======
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+>>>>>>> 2c299b5fddde95f9a31877b9207a599fff990351
 }
 
 

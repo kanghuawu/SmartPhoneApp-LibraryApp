@@ -1,5 +1,9 @@
 package com.cmpe277.libraryapp.models;
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +28,24 @@ public class Book implements Serializable {
     private String coverImage = "";
     private String borrowTime = "";  // if extended, this will be the time of the first borrow record
     private int numOfExtension = 0;     // [0, 2]
+
+    public static Book fromJson(JSONObject jsonObject) {
+        try {
+            Book book = new Book();
+            JSONObject item = jsonObject.getJSONArray("items").getJSONObject(0);
+            JSONObject volumeInfo = item.getJSONObject("volumeInfo");
+            book.title = volumeInfo.getString("title");
+            book.author = volumeInfo.getJSONArray("authors").join(", ");
+            book.publisher = volumeInfo.getString("publisher");
+            book.yearOfPublication = volumeInfo.getString("publishedDate");
+            Log.i("LibraryApp", "item to string" + jsonObject.toString());
+            Log.i("LibraryApp", "Generated book: " + book.toString());
+            return book;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public Book() {
     }

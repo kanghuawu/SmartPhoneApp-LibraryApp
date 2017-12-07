@@ -1,13 +1,16 @@
 package com.cmpe277.libraryapp;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -42,6 +45,17 @@ public class BookListActivity extends ListActivity {
 
         mEmail = prefs.getString(EMAIL, "");
         editsearch = (EditText) findViewById(R.id.search);
+
+        editsearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editsearch.getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
 
         isMyList = getIntent().getBooleanExtra("myBookList", false);
 

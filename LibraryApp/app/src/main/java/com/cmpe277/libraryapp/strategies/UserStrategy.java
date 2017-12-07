@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmpe277.libraryapp.BookCreateActivity;
 import com.cmpe277.libraryapp.GMailSender;
@@ -23,25 +24,6 @@ public abstract class UserStrategy {
     boolean toggleEdible = false;
     public abstract void setUpLandingPage(Activity activity);
     public abstract void setUpDetailPage(Activity activity, DatabaseReference databaseReference, Book book);
-    public void setUpBookCreatingPage(final Activity activity, final DatabaseReference databaseReference) {
-        TextView status = activity.findViewById(R.id.book_status);
-        EditText statusEdit = activity.findViewById(R.id.book_status_edit);
-        status.setVisibility(View.GONE);
-        statusEdit.setVisibility(View.GONE);
-        final Button detail_button1 = activity.findViewById(R.id.form_button1);
-        detail_button1.setText("Create");
-        detail_button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Book book = prepareUpdate(activity);
-                addOrUpdateNewBookToDB(databaseReference, book);
-                activity.finish();
-            }
-        });
-
-        Button detail_button2 = activity.findViewById(R.id.form_button2);
-        detail_button2.setVisibility(View.INVISIBLE);
-    }
 
     void renderBookDetail(Activity activity, Book book) {
         EditText title = activity.findViewById(R.id.book_title_edit);
@@ -64,6 +46,16 @@ public abstract class UserStrategy {
         keywords.setText(book.getKeywords());
     }
 
+    void renderBookDetailSubset(Activity activity, Book book) {
+        EditText title = activity.findViewById(R.id.book_title_edit);
+        title.setText(book.getTitle());
+        EditText author = activity.findViewById(R.id.book_author_edit);
+        author.setText(book.getAuthor());
+        EditText publisher = activity.findViewById(R.id.book_publisher_edit);
+        publisher.setText(book.getPublisher());
+        EditText year = activity.findViewById(R.id.book_year_edit);
+        year.setText(book.getYearOfPublication());
+    }
 
 
     Book prepareUpdate(Activity activity) {
@@ -71,6 +63,10 @@ public abstract class UserStrategy {
         String title = ((EditText)activity.findViewById(R.id.book_title_edit)).getText().toString();
         String author = ((EditText)activity.findViewById(R.id.book_author_edit)).getText().toString();
         String callnum = ((EditText)activity.findViewById(R.id.book_callnum_edit)).getText().toString();
+        if (title.equals("") || author.equals("") || callnum.equals("")) {
+            Toast.makeText(activity, "Need title/call num/author", Toast.LENGTH_SHORT).show();
+            return null;
+        }
         String publisher = ((EditText)activity.findViewById(R.id.book_publisher_edit)).getText().toString();
         String year = ((EditText)activity.findViewById(R.id.book_year_edit)).getText().toString();
         String location = ((EditText)activity.findViewById(R.id.book_location_edit)).getText().toString();
