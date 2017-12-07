@@ -146,6 +146,10 @@ public class Book implements Serializable {
         this.numOfExtension = numOfExtension;
     }
 
+    public void getDueTime() {
+
+    }
+
     @Override
     public String toString() {
         return "Book{" +

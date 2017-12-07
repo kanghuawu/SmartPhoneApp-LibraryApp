@@ -87,18 +87,20 @@ public class PatronStrategy extends UserStrategy {
                     if(!feedback.equals("")) {
                         Toast.makeText(activity, feedback,
                                 Toast.LENGTH_LONG).show();
+                    } else {
+                        //Send email notification after rent a book
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
+                                        " has been rent\nBorrow time: " + book.getBorrowTime() +
+                                        "\nThank you!\n\nLibrary Team";
+                                sendEmailNotification(email, emailContent);
+                            }
+                        }).start();
                     }
 
-                    //Send email notification after rent a book
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
-                                    " has been rent\nBorrow time: " + book.getBorrowTime() +
-                                    "\nThank you!\n\nLibrary Team";
-                            sendEmailNotification(email, emailContent);
-                        }
-                    }).start();
+
                     Intent intentMyList = new Intent(activity, BookListActivity.class);
                     activity.setResult(45);
                     activity.finish();
