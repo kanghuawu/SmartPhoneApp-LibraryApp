@@ -26,13 +26,21 @@ public class LandingPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mStatusTextView = findViewById(R.id.textView2);
-
         setContentView(R.layout.activity_landing_page);
+        mStatusTextView = (TextView) findViewById(R.id.textView2);
+        TextView v1 = (TextView) findViewById(R.id.textView);
+
         mAuth = FirebaseAuth.getInstance();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
+        boolean isVerified = currentUser.isEmailVerified();
+        if (!isVerified) {
+            String s = currentUser.getEmail() + " is Not Verified";
+            Log.i("SET TEXT", s);
+
+            v1.setText(s);
+        }
         SharedPreferences prefs = getSharedPreferences(LIB_PREFS, 0);
         boolean isLibrarian = prefs.getBoolean(IS_LIBRARIAN, false);
 

@@ -13,11 +13,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -123,12 +125,27 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("LibraryApp", "user creation failed");
                     showErrorDialog("Registration attempt failed!");
                 } else {
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    Log.i("USer", user.toString());
+                    user.sendEmailVerification()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("Email sent", "Email sent.");
+                                        Toast.makeText(RegisterActivity.this,
+                                                "Verification email sent",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                   Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     finish();
                     startActivity(intent);
                 }
             }
         });
+
     }
 
     private void showErrorDialog(String message) {
