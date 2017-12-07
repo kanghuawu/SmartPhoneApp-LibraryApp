@@ -5,6 +5,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -146,8 +147,27 @@ public class Book implements Serializable {
         this.numOfExtension = numOfExtension;
     }
 
-    public void getDueTime() {
+    public String getDueTime() {
 
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date borrowDate = null;
+        Calendar c = Calendar.getInstance();
+
+        try {
+            borrowDate = format.parse(borrowTime);
+
+            c.setTime(borrowDate);
+            c.add(Calendar.DATE, (numOfExtension + 1) * 30);
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(borrowDate != null) {
+            return format.format(c.getTime());
+        }
+
+        return "";
     }
 
     @Override

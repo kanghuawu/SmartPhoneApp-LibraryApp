@@ -94,6 +94,7 @@ public class PatronStrategy extends UserStrategy {
                             public void run() {
                                 String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
                                         " has been rent\nBorrow time: " + book.getBorrowTime() +
+                                        "\ndue date: " + book.getDueTime() +
                                         "\nThank you!\n\nLibrary Team";
                                 sendEmailNotification(email, emailContent);
                             }
