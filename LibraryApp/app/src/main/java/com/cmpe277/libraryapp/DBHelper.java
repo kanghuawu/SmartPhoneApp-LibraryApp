@@ -3,7 +3,6 @@ package com.cmpe277.libraryapp;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 import com.cmpe277.libraryapp.models.Book;
 import com.google.firebase.database.DataSnapshot;
@@ -119,6 +118,8 @@ public class DBHelper {
                     .child(BOOK_BORROW_Time)
                     .setValue(curTime);
 
+            book.setBorrowTime(curTime);
+
             Log.i("INFO", "Set book " + book.getTitle() +  " borrow time to be: " + curTime);
         } else {
             Log.i("INFO", "Book " + book.getTitle() + " is not available");
@@ -174,3 +175,4 @@ public class DBHelper {
                 .setValue("");
     }
 }
+
