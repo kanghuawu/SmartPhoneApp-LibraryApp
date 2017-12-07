@@ -89,7 +89,12 @@ public class LibrarianStrategy extends UserStrategy  {
             @Override
             public void onClick(View view) {
                 Log.i("LibraryApp", "Deleting a book");
-                removeBookFromDB(databaseReference, book.getCallNumber());
+
+                String feedback = removeBookFromDB(databaseReference, book);
+                if(!feedback.equals("")) {
+                    Toast.makeText(activity, feedback,
+                            Toast.LENGTH_LONG).show();
+                }
                 activity.finish();
             }
         });

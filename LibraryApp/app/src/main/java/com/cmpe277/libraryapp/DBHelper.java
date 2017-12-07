@@ -3,6 +3,7 @@ package com.cmpe277.libraryapp;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.cmpe277.libraryapp.models.Book;
 import com.google.firebase.database.DataSnapshot;
@@ -74,11 +75,24 @@ public class DBHelper {
         databaseReference.child(BOOK_DB).child(book.getCallNumber()).setValue(book);
     }
 
-    public static void removeBookFromDB(DatabaseReference databaseReference, String callNum) {
-        databaseReference.child(BOOK_DB).child(callNum).removeValue();
+    public static String removeBookFromDB(DatabaseReference databaseReference, Book book) {
+        String feedback = "";
+
+        Log.i("DEBUG", "book " + book.getTitle() + " status: " + book.getCurrentStatus());
+
+        if(!book.getCurrentStatus().equals(BOOK_STATUS_RENT)) {
+            databaseReference.child(BOOK_DB).child(book.getCallNumber()).removeValue();
+        } else {
+            Log.i("ERROR", "Cannot delete a book that's already been rent to users");
+            feedback = "Cannot delete a book in 'Rent' status";
+        }
+
+        return feedback;
     }
 
-    public static void rentBook(DatabaseReference databaseReference, Book book, String email) {
+    public static String rentBook(DatabaseReference databaseReference, Book book, String email) {
+        String feedback = "";
+
         if(!book.getCurrentStatus().equals(BOOK_STATUS_RENT)) {
             Log.i("INFO", "Book " + book.getTitle() +  " is available.");
 
@@ -108,10 +122,15 @@ public class DBHelper {
             Log.i("INFO", "Set book " + book.getTitle() +  " borrow time to be: " + curTime);
         } else {
             Log.i("INFO", "Book " + book.getTitle() + " is not available");
+            feedback = "Book is not available";
         }
+
+        return feedback;
     }
 
-    public static void extendBook(DatabaseReference databaseReference, Book book, String email) {
+    public static String extendBook(DatabaseReference databaseReference, Book book, String email) {
+        String feedback = "";
+
         email = email.replace(".", "dot");
         if(book.getCurrentStatus().equals("Rent")) {
             Log.i("INFO", "Book " + book.getTitle() + " can be extended.");
@@ -130,11 +149,14 @@ public class DBHelper {
                         .setValue(curNumOfExtension + 1);
             } else {
                 Log.i("INFO", "Book " + book.getTitle() +  " has already been extended twice.");
+                feedback = "Book already been extended twice.";
             }
         } else {
             Log.i("INFO", "Cannot extend a book that's not rent by you.");
+            feedback = "Cannot extend a book that's not rent by you.";
         }
 
+        return feedback;
     }
 
     public static void returnBook(DatabaseReference databaseReference, Book book, String email) {

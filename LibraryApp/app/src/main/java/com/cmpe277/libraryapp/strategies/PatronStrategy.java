@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cmpe277.libraryapp.BookListActivity;
 import com.cmpe277.libraryapp.LandingPageActivity;
@@ -80,7 +81,11 @@ public class PatronStrategy extends UserStrategy {
                 String email = prefs.getString(EMAIL, "");
                 if (!email.equals("")) {
 
-                    rentBook(databaseReference, book, email);
+                    String feedback = rentBook(databaseReference, book, email);
+                    if(!feedback.equals("")) {
+                        Toast.makeText(activity, feedback,
+                                Toast.LENGTH_LONG).show();
+                    }
 
                     Intent intentMyList = new Intent(activity, BookListActivity.class);
                     activity.setResult(45);
@@ -129,7 +134,12 @@ public class PatronStrategy extends UserStrategy {
                 String email = prefs.getString(EMAIL, "");
 
                 if (!email.equals("")) {
-                    extendBook(databaseReference, book, email);
+
+                    String feedback = extendBook(databaseReference, book, email);
+                    if(!feedback.equals("")) {
+                        Toast.makeText(activity, feedback,
+                                Toast.LENGTH_LONG).show();
+                    }
 
                     Intent intentMyList = new Intent(activity, BookListActivity.class);
                     activity.setResult(45);
