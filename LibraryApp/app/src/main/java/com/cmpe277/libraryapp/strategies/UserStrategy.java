@@ -1,12 +1,14 @@
 package com.cmpe277.libraryapp.strategies;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cmpe277.libraryapp.BookCreateActivity;
+import com.cmpe277.libraryapp.GMailSender;
 import com.cmpe277.libraryapp.R;
 import com.cmpe277.libraryapp.models.Book;
 import com.google.firebase.database.DatabaseReference;
@@ -104,5 +106,19 @@ public abstract class UserStrategy {
         location.setFocusable(toggleEdible);
         keywords.setFocusable(toggleEdible);
         toggleEdible  = !toggleEdible;
+    }
+
+    public void sendEmailNotification(String email, String content) {
+        try {
+            //Set your email user name and password
+            Log.i("LibraryApp","---Send Email Notification to: " + email);
+            GMailSender sender = new GMailSender("cmpe277library@gmail.com", "sjsu277123456");
+            sender.sendMail("LibraryApp Notification",
+                    content,
+                    "cmpe277library@gmail.com",
+                    email);
+        } catch (Exception e) {
+            Log.e("SendMail", e.getMessage(), e);
+        }
     }
 }

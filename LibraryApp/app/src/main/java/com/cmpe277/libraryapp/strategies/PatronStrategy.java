@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cmpe277.libraryapp.BookListActivity;
+import com.cmpe277.libraryapp.GMailSender;
 import com.cmpe277.libraryapp.LandingPageActivity;
 import com.cmpe277.libraryapp.R;
 import com.cmpe277.libraryapp.models.Book;
@@ -77,8 +78,19 @@ public class PatronStrategy extends UserStrategy {
             public void onClick(View view) {
                 Log.i("LibraryApp", "Renting a book");
                 SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
-                String email = prefs.getString(EMAIL, "");
+                final String email = prefs.getString(EMAIL, "");
+//                Log.i("LibraryApp",email);
                 if (!email.equals("")) {
+                    //Send email notification when rent a book
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
+                                    " has been rent\nBorrow time: " + book.getBorrowTime() +
+                                    "\nThank you!\n\nLibrary Team";
+                            sendEmailNotification(email, emailContent);
+                        }
+                    }).start();
 
                     rentBook(databaseReference, book, email);
 
@@ -105,10 +117,19 @@ public class PatronStrategy extends UserStrategy {
             public void onClick(View view) {
                 Log.i("LibraryApp", "Returning a book");
                 SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
-                String email = prefs.getString(EMAIL, "");
+                final String email = prefs.getString(EMAIL, "");
                 if (!email.equals("")) {
 
                     returnBook(databaseReference, book, email);
+
+                    // Send an email notification after return
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String emailContent = "Hi!\nThe Book:\n" + book.getTitle() + " has been return\n\nThank you!\n\nLibrary Team";
+                            sendEmailNotification(email, emailContent);
+                        }
+                    }).start();
 
                     Intent intentMyList = new Intent(activity, BookListActivity.class);
                     activity.setResult(45);
