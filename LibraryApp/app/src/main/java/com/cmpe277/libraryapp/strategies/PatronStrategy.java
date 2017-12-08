@@ -186,11 +186,21 @@ public class PatronStrategy extends UserStrategy {
                 Log.i("INFO", "FOR DEMO");
 
                 SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
-                String email = prefs.getString(EMAIL, "");
-
-
+                final String email = prefs.getString(EMAIL, "");
+                
                 forDemo(databaseReference, book, email);
 
+                //Send email notification after rent a book
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
+                                " left 1 day to return!" +
+                                "\nThe borrow time of this book is:" + book.getBorrowTime() +
+                                "\nThank you!\n\nLibrary Team";
+                        sendEmailNotification(email, emailContent);
+                    }
+                }).start();
 
                 Intent intentMyList = new Intent(activity, BookListActivity.class);
                 activity.setResult(45);
