@@ -158,7 +158,7 @@ public class Book implements Serializable {
 
             c.setTime(borrowDate);
             c.add(Calendar.DATE, (numOfExtension + 1) * 30);
-            
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

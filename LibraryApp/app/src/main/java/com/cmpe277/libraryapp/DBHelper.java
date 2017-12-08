@@ -10,8 +10,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -173,6 +176,39 @@ public class DBHelper {
                 .child(book.getCallNumber())
                 .child(BOOK_BORROW_Time)
                 .setValue("");
+    }
+
+    public static void forDemo(DatabaseReference databaseReference, Book book, String email) {
+        email = email.replace(".", "dot");
+
+        String borrowTime = book.getBorrowTime();
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        String fakeBorrowTime = "";
+
+        try {
+            Date borrowDate = format.parse(borrowTime);
+            c.setTime(borrowDate);
+            c.add(Calendar.DATE, -29);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        fakeBorrowTime = format.format(c.getTime());
+
+
+        databaseReference.child(USER_DB).child(email)
+                .child(book.getCallNumber())
+                .child(BOOK_BORROW_Time)
+                .setValue(fakeBorrowTime);
+        databaseReference.child(BOOK_DB)
+                .child(book.getCallNumber())
+                .child(BOOK_BORROW_Time)
+                .setValue(fakeBorrowTime);
+
+        book.setBorrowTime(fakeBorrowTime);
     }
 }
 

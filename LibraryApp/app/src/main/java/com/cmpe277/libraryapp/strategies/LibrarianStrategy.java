@@ -98,6 +98,9 @@ public class LibrarianStrategy extends UserStrategy  {
                 activity.finish();
             }
         });
+
+        Button form_button3 = activity.findViewById(R.id.form_button3);
+        form_button3.setVisibility(View.GONE);
     }
 
     public void setUpBookCreatingPage(final Activity activity, final DatabaseReference databaseReference) {
@@ -143,6 +146,9 @@ public class LibrarianStrategy extends UserStrategy  {
                 searchBookOnline(activity, isbn);
             }
         });
+
+        Button form_button3 = activity.findViewById(R.id.form_button3);
+        form_button3.setVisibility(View.GONE);
     }
 
     private final String GOOGLE_URL = "https://www.googleapis.com/books/v1/volumes";

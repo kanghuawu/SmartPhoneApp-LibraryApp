@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import static com.cmpe277.libraryapp.DBHelper.addOrUpdateNewBookToDB;
 import static com.cmpe277.libraryapp.DBHelper.extendBook;
+import static com.cmpe277.libraryapp.DBHelper.forDemo;
 import static com.cmpe277.libraryapp.DBHelper.removeBookFromDB;
 import static com.cmpe277.libraryapp.DBHelper.rentBook;
 import static com.cmpe277.libraryapp.DBHelper.returnBook;
@@ -65,7 +66,7 @@ public class PatronStrategy extends UserStrategy {
         });
     }
 
-    // detail view for BOOKLIST. contains only one button "RENT"
+    // detail view for BOOKLIST.
     @Override
     public void setUpDetailPage(final Activity activity, final DatabaseReference databaseReference, final Book book) {
         Log.i("patron  line69&&&", "status " + book.getCurrentStatus());
@@ -80,9 +81,8 @@ public class PatronStrategy extends UserStrategy {
                 Log.i("LibraryApp", "Renting a book");
                 SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
                 final String email = prefs.getString(EMAIL, "");
-//                Log.i("LibraryApp",email);
-                if (!email.equals("")) {
 
+                if (!email.equals("")) {
                     String feedback = rentBook(databaseReference, book, email);
                     if(!feedback.equals("")) {
                         Toast.makeText(activity, feedback,
@@ -111,9 +111,12 @@ public class PatronStrategy extends UserStrategy {
         });
         Button form_button2 = activity.findViewById(R.id.form_button2);
         form_button2.setVisibility(View.GONE);
+
+        Button form_button3 = activity.findViewById(R.id.form_button3);
+        form_button3.setVisibility(View.GONE);
     }
 
-    // detail view for MY BOOKLIST. contains two buttons "RETURN" and "EXTEND"
+    // detail view for MY BOOKLIST.
     public void setUpDetailPageForMyList(final Activity activity, final DatabaseReference databaseReference, final Book book) {
         renderBookDetail(activity, book);
         toggleEditable(activity);
@@ -171,6 +174,28 @@ public class PatronStrategy extends UserStrategy {
                     activity.startActivity(intentMyList);
                 }
 
+            }
+        });
+
+
+        Button form_button3 = activity.findViewById(R.id.form_button3);
+        form_button3.setText("Fake Date");
+        form_button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("INFO", "FOR DEMO");
+
+                SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
+                String email = prefs.getString(EMAIL, "");
+
+
+                forDemo(databaseReference, book, email);
+
+
+                Intent intentMyList = new Intent(activity, BookListActivity.class);
+                activity.setResult(45);
+                activity.finish();
+                activity.startActivity(intentMyList);
             }
         });
     }
