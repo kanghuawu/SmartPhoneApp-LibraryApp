@@ -138,6 +138,7 @@ public class LibrarianStrategy extends UserStrategy  {
                     return ;
                 }
                 Log.i("LibraryApp", "isbn length " + String.valueOf(isbn.length()));
+                isbn = isbn.replace("-", "");
                 if (!(isbn.length() == 10 || isbn.length() == 13)) {
                     Toast.makeText(activity, "Call num length isn't correct", Toast.LENGTH_SHORT).show();
                     return ;

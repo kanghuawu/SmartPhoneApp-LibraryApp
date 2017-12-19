@@ -1,6 +1,5 @@
 package com.cmpe277.libraryapp;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.BaseAdapter;
 
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by bondk on 12/2/17.
@@ -44,6 +44,7 @@ public class DBHelper {
                         books.add(child.getValue(Book.class));
                     }
                 }
+                Log.i("LibraryApp", books.get(0).getWaitList().toString());
                 adapter.notifyDataSetChanged();
             }
 
@@ -92,44 +93,39 @@ public class DBHelper {
         return feedback;
     }
 
-    public static String rentBook(DatabaseReference databaseReference, Book book, String email) {
-        String feedback = "";
+    public static void putOnWaitList(DatabaseReference databaseReference, Book book, String email) {
+        String keyEmail = email.replace(".", "dot");
+        book.addToWaitList(email);
 
+        databaseReference.child(BOOK_DB)
+                .child(book.getCallNumber())
+                .setValue(book);
+        databaseReference.child(USER_DB)
+                .child(book.getCurrentBorrower().replace(".", "dot"))
+                .child(book.getCallNumber())
+                .setValue(book);
+    }
+
+    public static void rentBook(DatabaseReference databaseReference, Book book, String email) {
         if(!book.getCurrentStatus().equals(BOOK_STATUS_RENT)) {
+            if (book.getWaitList().contains(email) && book.getWaitList().get(0).equals(email)) {
+                book.getWaitList().remove(email);
+            }
             Log.i("INFO", "Book " + book.getTitle() +  " is available.");
-
-            email = email.replace(".", "dot");
             String curTime = new SimpleDateFormat(TIME_FORMAT).format(new Date());
-
+            book.setBorrowTime(curTime);
+            book.setCurrentBorrower(email);
+            book.setCurrentStatus(BOOK_STATUS_RENT);
+            email = email.replace(".", "dot");
             databaseReference.child(USER_DB).child(email)
                     .child(book.getCallNumber())
                     .setValue(book);
-            databaseReference.child(USER_DB).child(email)
-                    .child(book.getCallNumber())
-                    .child(BOOK_STATUS)
-                    .setValue(BOOK_STATUS_RENT);
-            databaseReference.child(USER_DB).child(email)
-                    .child(book.getCallNumber())
-                    .child(BOOK_BORROW_Time)
-                    .setValue(curTime);
             databaseReference.child(BOOK_DB)
                     .child(book.getCallNumber())
-                    .child(BOOK_STATUS)
-                    .setValue(BOOK_STATUS_RENT);
-            databaseReference.child(BOOK_DB)
-                    .child(book.getCallNumber())
-                    .child(BOOK_BORROW_Time)
-                    .setValue(curTime);
-
-            book.setBorrowTime(curTime);
+                    .setValue(book);
 
             Log.i("INFO", "Set book " + book.getTitle() +  " borrow time to be: " + curTime);
-        } else {
-            Log.i("INFO", "Book " + book.getTitle() + " is not available");
-            feedback = "Book is not available";
         }
-
-        return feedback;
     }
 
     public static String extendBook(DatabaseReference databaseReference, Book book, String email) {
@@ -165,17 +161,16 @@ public class DBHelper {
 
     public static void returnBook(DatabaseReference databaseReference, Book book, String email) {
         email = email.replace(".", "dot");
+        book.setCurrentStatus("");
+        book.setCurrentBorrower("");
+        book.setBorrowTime("");
+
         databaseReference.child(USER_DB).child(email)
                 .child(book.getCallNumber())
                 .removeValue();
         databaseReference.child(BOOK_DB)
                 .child(book.getCallNumber())
-                .child(BOOK_STATUS)
-                .setValue("");
-        databaseReference.child(BOOK_DB)
-                .child(book.getCallNumber())
-                .child(BOOK_BORROW_Time)
-                .setValue("");
+                .setValue(book);
     }
 
     public static void forDemo(DatabaseReference databaseReference, Book book, String email) {

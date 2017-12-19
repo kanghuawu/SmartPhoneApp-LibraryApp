@@ -33,8 +33,8 @@ public class Book implements Serializable {
     private String coverImage = "";
     private String borrowTime = "";  // if extended, this will be the time of the first borrow record
     private int numOfExtension = 0;     // [0, 2]
-    private String currentBorrower;
-    private Queue<String> waitList = new LinkedList<>();
+    private String currentBorrower = "";
+    private List<String> waitList = new ArrayList<>();
 
     public String getCurrentBorrower() {
         return currentBorrower;
@@ -44,11 +44,11 @@ public class Book implements Serializable {
         this.currentBorrower = currentBorrower;
     }
 
-    public Queue<String> getWaitList() {
+    public List<String> getWaitList() {
         return waitList;
     }
 
-    public void setWaitList(Queue<String> waitList) {
+    public void setWaitList(List<String> waitList) {
         this.waitList = waitList;
     }
 
@@ -60,20 +60,12 @@ public class Book implements Serializable {
         return this.waitList.contains(email);
     }
 
-    public String peekWaitList() {
-        return this.waitList.peek();
-    }
-
-    public String pollWaitList() {
-        return this.waitList.poll();
-    }
-
     public static Book fromJson(JSONObject jsonObject) {
         try {
             Book book = new Book();
             JSONObject item = jsonObject.getJSONArray("items").getJSONObject(0);
             JSONObject volumeInfo = item.getJSONObject("volumeInfo");
-            book.title = volumeInfo.getString("title");
+            book.title = volumeInfo.getString("bookTitle");
             book.author = volumeInfo.getJSONArray("authors").join(", ");
             book.publisher = volumeInfo.getString("publisher");
             book.yearOfPublication = volumeInfo.getString("publishedDate");
@@ -212,7 +204,7 @@ public class Book implements Serializable {
     public String toString() {
         return "Book{" +
                 "author='" + author + '\'' +
-                ", title='" + title + '\'' +
+                ", bookTitle='" + title + '\'' +
                 ", callNumber='" + callNumber + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", yearOfPublication='" + yearOfPublication + '\'' +

@@ -64,7 +64,7 @@ public abstract class UserStrategy {
         String author = ((EditText)activity.findViewById(R.id.book_author_edit)).getText().toString();
         String callnum = ((EditText)activity.findViewById(R.id.book_callnum_edit)).getText().toString();
         if (title.equals("") || author.equals("") || callnum.equals("")) {
-            Toast.makeText(activity, "Need title/call num/author", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Need bookTitle/call num/author", Toast.LENGTH_SHORT).show();
             return null;
         }
         String publisher = ((EditText)activity.findViewById(R.id.book_publisher_edit)).getText().toString();
