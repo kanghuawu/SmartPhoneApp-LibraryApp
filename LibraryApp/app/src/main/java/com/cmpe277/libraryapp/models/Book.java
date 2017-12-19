@@ -8,9 +8,13 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by bondk on 12/1/17.
@@ -29,6 +33,40 @@ public class Book implements Serializable {
     private String coverImage = "";
     private String borrowTime = "";  // if extended, this will be the time of the first borrow record
     private int numOfExtension = 0;     // [0, 2]
+    private String currentBorrower;
+    private Queue<String> waitList = new LinkedList<>();
+
+    public String getCurrentBorrower() {
+        return currentBorrower;
+    }
+
+    public void setCurrentBorrower(String currentBorrower) {
+        this.currentBorrower = currentBorrower;
+    }
+
+    public Queue<String> getWaitList() {
+        return waitList;
+    }
+
+    public void setWaitList(Queue<String> waitList) {
+        this.waitList = waitList;
+    }
+
+    public void addToWaitList(String email) {
+        this.waitList.add(email);
+    }
+
+    public boolean isOnWaitList(String email) {
+        return this.waitList.contains(email);
+    }
+
+    public String peekWaitList() {
+        return this.waitList.peek();
+    }
+
+    public String pollWaitList() {
+        return this.waitList.poll();
+    }
 
     public static Book fromJson(JSONObject jsonObject) {
         try {

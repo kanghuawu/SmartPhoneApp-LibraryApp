@@ -136,12 +136,12 @@ public class RegisterActivity extends AppCompatActivity {
                                         Toast.makeText(RegisterActivity.this,
                                                 "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        finish();
+                                        startActivity(intent);
                                     }
                                 }
                             });
-                   Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    finish();
-                    startActivity(intent);
                 }
             }
         });

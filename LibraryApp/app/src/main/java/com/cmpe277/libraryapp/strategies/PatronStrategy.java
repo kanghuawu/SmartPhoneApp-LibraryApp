@@ -2,6 +2,8 @@ package com.cmpe277.libraryapp.strategies;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -82,31 +84,46 @@ public class PatronStrategy extends UserStrategy {
                 SharedPreferences prefs = activity.getSharedPreferences(LIB_PREFS, 0);
                 final String email = prefs.getString(EMAIL, "");
 
-                if (!email.equals("")) {
-                    String feedback = rentBook(databaseReference, book, email);
-                    if(!feedback.equals("")) {
-                        Toast.makeText(activity, feedback,
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        //Send email notification after rent a book
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
-                                        " has been rent\nBorrow time: " + book.getBorrowTime() +
-                                        "\ndue date: " + book.getDueTime() +
-                                        "\nThank you!\n\nLibrary Team";
-                                sendEmailNotification(email, emailContent);
-                            }
-                        }).start();
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("This is title");
+                builder.setMessage("this your email " + email);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i("LibraryApp", "alertdialog clicked ok");
                     }
-
-
-                    Intent intentMyList = new Intent(activity, BookListActivity.class);
-                    activity.setResult(45);
-                    activity.finish();
-                    activity.startActivity(intentMyList);
-                }
+                });
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i("LibraryApp", "alertdialog clicked cancel");
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+//                if (!email.equals("")) {
+//                    String feedback = rentBook(databaseReference, book, email);
+//                    if(!feedback.equals("")) {
+//                        Toast.makeText(activity, feedback,
+//                                Toast.LENGTH_LONG).show();
+//                    } else {
+//                        //Send email notification after rent a book
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                String emailContent = "Hi!\nThe Book:\n" + book.getTitle() +
+//                                        " has been rent\nBorrow time: " + book.getBorrowTime() +
+//                                        "\ndue date: " + book.getDueTime() +
+//                                        "\nThank you!\n\nLibrary Team";
+//                                sendEmailNotification(email, emailContent);
+//                            }
+//                        }).start();
+//                    }
+//
+//
+//                    Intent intentMyList = new Intent(activity, BookListActivity.class);
+//                    activity.setResult(45);
+//                    activity.finish();
+//                    activity.startActivity(intentMyList);
+//                }
             }
         });
         Button form_button2 = activity.findViewById(R.id.form_button2);

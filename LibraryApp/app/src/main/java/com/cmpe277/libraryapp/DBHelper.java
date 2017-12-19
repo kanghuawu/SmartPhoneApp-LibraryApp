@@ -39,7 +39,7 @@ public class DBHelper {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.i("&&&", child.getKey());
+                    Log.i("LibraryApp", child.getKey());
                     if(!child.getKey().contains("@")) {
                         books.add(child.getValue(Book.class));
                     }
