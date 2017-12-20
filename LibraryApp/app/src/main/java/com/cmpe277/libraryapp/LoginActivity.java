@@ -53,9 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null ) {
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
 //            Log.d("LibraryApp", "Current user" + mAuth.getCurrentUser().getEmail().toString());
-
             switchPage();
         }
     }
@@ -82,7 +81,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(this, "Login in progress...", Toast.LENGTH_SHORT);
+
+        Toast.makeText(this, "Login in progress...", Toast.LENGTH_SHORT).show();
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -93,7 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("LibraryApp", "Problem signing in: " + task.getException());
                     showErrorDialog("There was a problem signing in");
                 } else {
-                    switchPage();
+                    Log.i("LibraryApp", "" + mAuth.getCurrentUser().getEmail());
+                    Log.i("LibraryApp", "" + mAuth.getCurrentUser().isEmailVerified());
+                    if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
+                        switchPage();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Please verify with your email first", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

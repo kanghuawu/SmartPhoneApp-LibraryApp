@@ -117,6 +117,9 @@ public class RegisterActivity extends AppCompatActivity {
     private void createFirebaseUser() {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        Toast.makeText(RegisterActivity.this,
+                "Sign up processsing...",
+                Toast.LENGTH_SHORT).show();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -125,21 +128,30 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("LibraryApp", "user creation failed");
                     showErrorDialog("Registration attempt failed!");
                 } else {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    Log.i("USer", user.toString());
+
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    Log.i("LibraryApp", "Show email " + user.getEmail());
+                    if (user == null) {
+                        Log.d("LibraryApp", "user is null");
+                        return;
+                    }
                     user.sendEmailVerification()
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Log.d("Email sent", "Email sent.");
+                                        Log.d("LibraryApp", "Email sent.");
                                         Toast.makeText(RegisterActivity.this,
                                                 "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
+                                        mAuth.signOut();
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                         finish();
                                         startActivity(intent);
+                                    } else {
+                                        Log.d("LibraryApp", task.getException().toString());
                                     }
+
                                 }
                             });
                 }
